@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://js.stripe.com/v3/"></script> <!-- Stripe JS -->
+</head>
+<body>
+  <h1>Product List</h1>
+
+  <!-- Cart Section -->
+  <div class="cart">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p id="cart-total">Total: $0.00</p>
+    <button id="checkout-btn" style="display:none;">Proceed to Checkout</button>
+  </div>
+
+  <!-- Product List -->
+  <ul class="product-List">
+
+    <div class="product">
+      <img src="NikeAirForce1'07-mainPic.png" alt="Nike Air Force 1" onclick="openModal(['AirforceWhitePi1.png', 'AirforceWhitePi3.png', 'AirforceWhitePi4.png'])">
+      <h3>Nike Air Force 1 '07 - Men's Shoes - Sneakers</h3>
+      <p class="size-tag">Size: M-6 / W-7.5</p>
+      <p id="Price-tag">$99.99</p>
+      <p id="in-Stock">In Stock: <span id="stock2">1</span></p>
+      <button class="buy-now" data-product-id="1" data-price="99.99" data-name="Nike Air Force 1 '07">ADD TO CART</button>
+    </div>
+    
+    <div class="product">
+      <img src="razerpic00.jpg" alt="Razer Kishi" onclick="openModal(['razerpic00.jpg', 'razerpic1.jpg', 'Razerpic5.webp'])">
+      <h3>Razer Kishi for iPhone - Universal Gaming Controller for iOS</h3>
+      <p class="size-tag">- Clickable Analog Thumbsticks<br>- Universal Fit<br>- Ultra-Low Latency Gameplay</p>
+      <p id="Price-tag">$69.99</p>
+      <p id="in-Stock">In Stock: <span id="stock1">1</span></p>
+      <button class="buy-now" data-product-id="2" data-price="69.99" data-name="Razer Kishi">ADD TO CART</button>
+    </div>
+
+    <div class="product">
+      <img src="NikeAirForce1'07-mainPic.png" alt="Nike Air Force 1" onclick="openModal(['AirforceWhitePi1.png', 'AirforceWhitePi3.png', 'AirforceWhitePi4.png'])">
+      <h3>Nike Air Force 1 '07 - Men's Shoes - Sneakers</h3>
+      <p class="size-tag">Size: M-6 / W-7.5</p>
+      <p id="Price-tag">$99.99</p>
+      <p id="in-Stock">In Stock: <span id="stock2">1</span></p>
+      <button class="buy-now" data-product-id="1" data-price="99.99" data-name="Nike Air Force 1 '07">ADD TO CART</button>
+    </div>
+    
+    <div class="product">
+      <img src="razerpic00.jpg" alt="Razer Kishi" onclick="openModal(['razerpic00.jpg', 'razerpic1.jpg', 'Razerpic5.webp'])">
+      <h3>Razer Kishi for iPhone - Universal Gaming Controller for iOS</h3>
+      <p class="size-tag">- Clickable Analog Thumbsticks<br>- Universal Fit<br>- Ultra-Low Latency Gameplay</p>
+      <p id="Price-tag">$69.99</p>
+      <p id="in-Stock">In Stock: <span id="stock1">1</span></p>
+      <button class="buy-now" data-product-id="2" data-price="69.99" data-name="Razer Kishi">ADD TO CART</button>
+    </div>
+    
+    <!-- Add more products as needed -->
+  </ul>
+
+  <!-- Modal Structure -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <button class="prev" onclick="changeImage(-1)">&#10094;</button>
+      <img id="modalImage" src="" alt="Product Image">
+      <button class="next" onclick="changeImage(1)">&#10095;</button>
+    </div>
+  </div>
+
+  <script>
+    let currentImageIndex = 0; // To keep track of which image is currently shown
+    let imageArray = []; // Array to store multiple image sources
+
+    function openModal(images) {
+      imageArray = images; // Store the array of images
+      currentImageIndex = 0; // Reset to first image
+      const modal = document.getElementById('productModal');
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageArray[currentImageIndex];  // Set the first image in modal
+      modal.style.display = 'block'; // Show the modal
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('productModal');
+      modal.style.display = 'none'; // Hide the modal
+    }
+
+    // Change image based on the button clicked (next/prev)
+    function changeImage(direction) {
+      currentImageIndex += direction;
+      
+      // If at the start or end, loop around
+      if (currentImageIndex < 0) {
+        currentImageIndex = imageArray.length - 1;
+      } else if (currentImageIndex >= imageArray.length) {
+        currentImageIndex = 0;
+      }
+      
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageArray[currentImageIndex]; // Set the new image
+    }
+
+    // When the user clicks anywhere outside the modal, close it
+    window.onclick = function(event) {
+      const modal = document.getElementById('productModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

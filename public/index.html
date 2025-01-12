@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://js.stripe.com/v3/"></script> <!-- Stripe JS -->
+
+  <style>
+    /* Modal for image slider */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+      position: relative;
+      margin: auto;
+      padding: 20px;
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    .modal-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 10px;
+      padding: 2px;
+      border: 2px solid lightskyblue;
+      border-radius: 8px;
+      box-shadow: 0px 2px 10px white;
+    }
+    body.lightStore .modal-content img {
+      border: 2px solid gold;
+      border-radius: 8px;
+      box-shadow: 0px 2px 10px yellowgreen;
+    }
+
+    /* Next and Previous buttons */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      padding: 16px;
+      margin-top: -22px;
+      color: #f1f1f1;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.3s;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .prev {
+      left: 0;
+    }
+
+    .next {
+      right: 0;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    @media (min-width: 768px){
+    .modal-content{
+      padding-top: 60px;
+    }
+    .modal-content img {
+      width: 400px;
+      height: auto;
+    }
+    }
+
+  </style>
+</head>
+<body>
+  <h1>êTre</h1>    
+
+  <button id="HideShow-Btn"><i class="fas fa-music"></i></button> 
+  
+
+  <!-- Search Bar -->
+  <input type="text" id="search-bar" placeholder=".;.LOLLIPOP CLUB.;." oninput="searchProducts()">
+  <button id="voice-search-btn" aria-label="Voice Search">🎙️</button>  
+  
+  <!-- Dropdown for language selection -->
+  <select id="language-select">
+    <option value="en-US">English (US)</option>
+     <option value="es-ES">Spanish</option>
+     <option value="fr-FR">French</option>
+     <option value="de-DE">German</option>
+     <option value="it-IT">Italian</option>
+   </select>
+
+   
+  <!-- Navigation Info -->
+  <div class="nav-info">
+    <a href="https://jjservice.github.io/L2/1.html"><ion-icon name="home"></ion-icon></a>
+    <a href="About.html">About</a>
+    <a href="ContactForm.html">Contact</a>
+    <a href="Faq.html">FAQ</a>
+  </div>
+
+  <!-- Navigation Section -->
+    <details>
+      <summary><i class="fa fa-shopping-cart"></i></summary>
+      <div class="cart-container">
+      <div id="cart-items"></div>
+      <p id="cart-total" style="color: white;">Total: $0.00</p>
+    <button id="checkout-btn" style="display:none;">Proceed to Checkout</button>
+  </div>
+  </details>
+
+  
+  <ul class="song-details" id="song-details" style="display: none;">
+    <!-- Song Image -->
+    <img id="songImage" src="" alt="Song Image">
+    
+    <!-- Song Name and Artist Name -->
+    <div id="songInfo">
+        <h5 id="artistName">Artist Name</h5>
+        <h5 id="songName">Song Name</h5>
+        <!-- Search Input -->
+       
+    </div>
+
+    <div id="audio-controls">
+        <audio id="audioPlayer" src="#"></audio>
+        <button id="prevBtn"><i class="fas fa-step-backward"></i></button>
+        <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+        <button id="nextBtn"><i class="fas fa-step-forward"></i></button>
+        <button id="randomBtn"><i class="fas fa-random"></i></button>
+    </div>
+
+    <!-- Track List Container -->
+    <ul id="trackList">list</ul>
+    <input type="text" id="searchInput" placeholder=".;.LOLLITA MUSIC.;.">
+</ul>
+
+     <!-- Navigation Section -->
+
+     <div class="navigation">
+     
+      <div class="L-Clothing-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="nba"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Watches-Nav"><a href="https://buy.stripe.com/bIY2aX6Xr4qde884gn"><ion-icon name="finger-print"></ion-icon></a></div> 
+      <div class="L-Sneakers-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Accesories-Nav"><a href="https://buy.stripe.com/bIY2aX6Xr4qde884gn"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-RealState-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Men-Fashion-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Glasses-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Shoes-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-Kitchen-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="L-RealState-Nav"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+      <div class="nba"><a href="https://buy.stripe.com/eVadTF4Pj5uh8NO3ci"><ion-icon name="finger-print"></ion-icon></a></div>
+  
+      </div>
+  
+      <div class="container">
+        <h5 class="title-Rotation">LOLLIP<ion-icon name="headset-sharp"></ion-icon>P</h5> 
+        <div class="Box">
+            <div class="img">
+  
+                <div class="imgBox" style="--i:1;">
+                    <a href="#"><img src="NikeAirForce1'07-mainPic.png"></a>
+                </div>
+  
+                <div class="imgBox" style="--i:2;">
+                    <a href="#"><img src="razer6.jpg"></a>
+                </div>
+  
+                <div class="imgBox" style="--i:3;">
+                    <a href="#"><img src="NikeAirForceWaterGif.gif"></a>
+                </div>
+  
+                <div class="imgBox" style="--i:4;">
+                  <a href="#"><img src="razerpic00.jpg"></a>
+              </div>
+  
+              <div class="imgBox" style="--i:5;">
+                  <a href="#"><img src="AirforceWhitePi1.png"></a>
+              </div>
+  
+              
+              <div class="imgBox" style="--i:6;">
+                <a href="#"><img src="Razerpic5.webp"></a>
+             </div>            
+  
+              <div class="imgBox" style="--i:7;">
+                <a href="#"><img src="Razerpic2.jpg"></a>
+             </div>
+  
+            <div class="imgBox" style="--i:8;">
+                <a href="#"><img src="MonkeyDesignGif.gif"></a>
+            </div>
+  
+  
+               
+  
+            </div>
+        </div>
+    </div>
+  
+     <!---------- Blink Section-------------->
+    <div class="image-container">
+      <img src="razer3.jpg" class="blink-image" alt="Image 1">
+      <img src="AirforceWhitePi4.png" class="blink-image" alt="Image 2">
+      <img src="razerpic00.jpg" class="blink-image" alt="Image 3">
+      <img src="NikeAirForce1'07-mainPic.png" class="blink-image" alt="Image 4">
+      <img src="Razerpic2.jpg" class="blink-image" alt="Image 5">
+      <img src="Razerpic5.webp" class="blink-image" alt="Image 6">
+      <img src="AirforceWhitePi1.png" class="blink-image" alt="Image 7">
+      <img src="razer6.jpg" class="blink-image" alt="Image 8">
+  </div>
+
+
+  <!-- Product List -->
+  <ul class="product-List">
+
+    <div class="product">
+      <img src="NikeAirForce1'07-mainPic.png" alt="Nike Air Force 1" onclick="openModal(['AirforceWhitePi1.png', 'AirforceWhitePi3.png', 'AirforceWhitePi4.png'])">
+      <h3>Nike Air Force 1 '07 - Men's Shoes - Sneakers</h3>
+      <p class="size-tag">Size: M-6 / W-7.5</p>
+      <p id="Price-tag">$99.99</p>
+      <input type="number" class="quantity-input" value="1" min="1" max="1" data-product-id="1">
+      <p id="in-Stock">In Stock: <span id="stock2">1</span></p>
+      <button class="buy-now" data-product-id="1" data-price="99.99" data-name="Nike Air Force 1 '07 - SMALL">ADD TO CART</button>
+    </div>
+    
+    <div class="product">
+      <img src="razerpic00.jpg" alt="Razer Kishi" onclick="openModal(['razerpic00.jpg', 'razerpic1.jpg', 'Razerpic5.webp'])">
+      <h3>Razer Kishi for iPhone - Universal Gaming Controller for iOS X-LARGE</h3>
+      <p class="size-tag">- Clickable Analog Thumbsticks<br>- Universal Fit<br>- Ultra-Low Latency Gameplay</p>
+      <p id="Price-tag">$59.99</p>
+      <input type="number" class="quantity-input" value="1" min="1" max="1" data-product-id="2">
+      <p id="in-Stock">In Stock: <span id="stock2">1</span></p>
+      <button class="buy-now" data-product-id="2" data-price="59.99" data-name="Razer Kishi - LARGE">ADD TO CART</button>
+    </div>
+    
+    
+    
+    
+    <!-- Add more products as needed -->
+  </ul>
+
+  <!-- Modal Structure -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <button class="prev" onclick="changeImage(-1)"  style="background-color: rgba(0, 0, 0, 0.877); border: none;">&#10094;</button>
+      <img id="modalImage" src="" alt="Product Image">
+      <button class="next" onclick="changeImage(1)" style="background-color: rgba(0, 0, 0, 0.877); border: none;">&#10095;</button>
+    </div>
+  </div>
+
+  <script>
+    // Function to update the button state based on stock levels
+    function updateButtonState() {
+      // Loop through each product and check the stock vs. quantity selected
+      document.querySelectorAll('.product').forEach(function(product) {
+        // Get the product's stock and the quantity input
+        const stock = parseInt(product.querySelector('#stock2').innerText) || parseInt(product.querySelector('#stock1').innerText);
+        const quantityInput = product.querySelector('.quantity-input');
+        const buyNowButton = product.querySelector('.buy-now');
+        
+        // Check if the quantity exceeds stock
+        if (parseInt(quantityInput.value) > stock) {
+          // Update the button to "Out of Stock"
+          buyNowButton.innerText = "OUT OF STOCK";
+          buyNowButton.disabled = true;  // Optionally disable the button
+          buyNowButton.style.backgroundColor = "red";
+        } else {
+          // Restore the button to "Add to Cart"
+          buyNowButton.innerText = "ADD TO CART";
+          buyNowButton.disabled = false;
+          buyNowButton.style.backgroundColor = "green";
+
+  
+        }
+      });
+    }
+    
+  
+    // Event listener for quantity input changes
+    document.querySelectorAll('.quantity-input').forEach(function(input) {
+      input.addEventListener('input', updateButtonState);
+    });
+  
+    // Initial update on page load
+    window.onload = updateButtonState;
+  </script>
+  
+
+  <script>
+    //////Hide And Show Section //////////
+
+const myButton = document.getElementById("HideShow-Btn");
+        const myImg = document.getElementById("song-details");
+
+        myButton.addEventListener("click", event => {
+            if (myImg.style.display === "none") {
+                myImg.style.display = "block";
+                myButton.style.color = "red";
+                myButton.style.border = "1px solid red";
+                myButton.innerHTML = ' <i class="fas fa-times"></i> '; // Show music note
+            } else {
+                myImg.style.display = "none";
+                myButton.style.color = "yellow";
+                myButton.style.border = "none";
+                myButton.style.borderTop = "2px solid yellow";
+                myButton.innerHTML = '<i class="fas fa-music"></i>'; // Show "X" icon
+            }
+        });
+
+  </script>
+  
+  <script src="script.js"></script>
+  <script src="Search.js"></script>
+  <script src="music.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>
